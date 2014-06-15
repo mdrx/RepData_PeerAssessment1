@@ -8,10 +8,6 @@ activity<-read.csv('activity.csv')
 activity$date<-as.Date(activity$date)
 activity$weekday<-weekdays(activity$date)
 ```
-We now have data with the following structure:
-``` {r}
-str(activity)
-```
 
 ## What is mean total number of steps taken per day?
 
@@ -26,13 +22,18 @@ abline(v=MeanStepsPerDay, col="blue")
 abline(v=MedianStepsPerDay, col="red")
 ```
 
-The lines are very close to each other and hardly distinguishable on the plot. The mean is `r format(MeanStepsPerDay, digits=6)` and the median is `r MedianStepsPerDay`.
+The lines are very close to each other and hardly distinguishable on the plot. The mean is `r format(MeanStepsPerDay, digits=5)` and the median is `r MedianStepsPerDay`.
 
 ## What is the average daily activity pattern?
 
 ``` {r}
-StepsPerInterval=aggregate(activity$steps, by=list(activity$interval), FUN=mean, na.rm=TRUE)
-plot(StepsPerInterval$Group.1,StepsPerInterval$x, type="l", main="Average number of steps per 5-min interval", xlab="5-min interval (hhmm)", ylab="Average steps per 5-min interval")
+StepsPerInterval=
+  aggregate(activity$steps, by=list(activity$interval), FUN=mean, na.rm=TRUE)
+plot(StepsPerInterval$Group.1,
+     StepsPerInterval$x, type="l", 
+     main="Average number of steps per 5-min interval", 
+     xlab="5-min interval (hhmm)", 
+     ylab="Average steps per 5-min interval")
 ```
 
 On average across the observed period, the highest number of steps was during interval:  
@@ -71,12 +72,15 @@ abline(v=MeanStepsPerDay, col="blue")
 abline(v=MedianStepsPerDay, col="red")
 ```
 
-The mean has now decreased significantly due to the imputation method based on median. The mean is now `r format(MeanStepsPerDay, digits=6)` and the median is `r MedianStepsPerDay`.
+The mean has now decreased significantly due to the imputation method based on median. The mean is now `r format(MeanStepsPerDay, digits=5)` and the median is `r MedianStepsPerDay`.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 Let's map the data to *Weekday* or *Weekend*. 
 ``` {r}
-DaysOfWeek<-as.data.frame(cbind(c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),c("Weekday","Weekday","Weekday","Weekday","Weekday","Weekend","Weekend")))
+DaysOfWeek <- as.data.frame(
+  cbind(
+    c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),
+    c("Weekday","Weekday","Weekday","Weekday","Weekday","Weekend","Weekend")))
 
 activity.imputed.weekend<-merge(activity.imputed,DaysOfWeek,by.x=4,by.y=1)
 colnames(activity.imputed.weekend)[5]<-"TypeOfDay"
@@ -84,8 +88,11 @@ colnames(activity.imputed.weekend)[5]<-"TypeOfDay"
 
 Aggregation for plotting:
 ``` {r}
-StepsPerInterval=aggregate(activity.imputed.weekend$steps, by=c(list(activity.imputed.weekend$interval),list(activity.imputed.weekend$TypeOfDay)), FUN=mean, na.rm=TRUE)
-str(StepsPerInterval)
+StepsPerInterval=
+  aggregate(activity.imputed.weekend$steps,
+            by=c(list(activity.imputed.weekend$interval),
+                 ist(activity.imputed.weekend$TypeOfDay)),
+            FUN=mean, na.rm=TRUE)
 colnames(StepsPerInterval)<-c('Interval','TypeOfDay','Steps')
 ```
 

@@ -9,19 +9,6 @@ activity<-read.csv('activity.csv')
 activity$date<-as.Date(activity$date)
 activity$weekday<-weekdays(activity$date)
 ```
-We now have data with the following structure:
-
-```r
-str(activity)
-```
-
-```
-## 'data.frame':	17568 obs. of  4 variables:
-##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
-##  $ date    : Date, format: "2012-10-01" "2012-10-01" ...
-##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
-##  $ weekday : chr  "Monday" "Monday" "Monday" "Monday" ...
-```
 
 ## What is mean total number of steps taken per day?
 
@@ -37,19 +24,24 @@ abline(v=MeanStepsPerDay, col="blue")
 abline(v=MedianStepsPerDay, col="red")
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
 
-The lines are very close to each other and hardly distinguishable on the plot. The mean is 10766.2 and the median is 10765.
+The lines are very close to each other and hardly distinguishable on the plot. The mean is 10766 and the median is 10765.
 
 ## What is the average daily activity pattern?
 
 
 ```r
-StepsPerInterval=aggregate(activity$steps, by=list(activity$interval), FUN=mean, na.rm=TRUE)
-plot(StepsPerInterval$Group.1,StepsPerInterval$x, type="l", main="Average number of steps per 5-min interval", xlab="5-min interval (hhmm)", ylab="Average steps per 5-min interval")
+StepsPerInterval=
+  aggregate(activity$steps, by=list(activity$interval), FUN=mean, na.rm=TRUE)
+plot(StepsPerInterval$Group.1,
+     StepsPerInterval$x, type="l", 
+     main="Average number of steps per 5-min interval", 
+     xlab="5-min interval (hhmm)", 
+     ylab="Average steps per 5-min interval")
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
 On average across the observed period, the highest number of steps was during interval:  
 
@@ -109,15 +101,18 @@ abline(v=MeanStepsPerDay, col="blue")
 abline(v=MedianStepsPerDay, col="red")
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
 
-The mean has now decreased significantly due to the imputation method based on median. The mean is now 9503.87 and the median is 10395.
+The mean has now decreased significantly due to the imputation method based on median. The mean is now 9503.9 and the median is 10395.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 Let's map the data to *Weekday* or *Weekend*. 
 
 ```r
-DaysOfWeek<-as.data.frame(cbind(c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),c("Weekday","Weekday","Weekday","Weekday","Weekday","Weekend","Weekend")))
+DaysOfWeek <- as.data.frame(
+  cbind(
+    c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),
+    c("Weekday","Weekday","Weekday","Weekday","Weekday","Weekend","Weekend")))
 
 activity.imputed.weekend<-merge(activity.imputed,DaysOfWeek,by.x=4,by.y=1)
 colnames(activity.imputed.weekend)[5]<-"TypeOfDay"
@@ -126,19 +121,23 @@ colnames(activity.imputed.weekend)[5]<-"TypeOfDay"
 Aggregation for plotting:
 
 ```r
-StepsPerInterval=aggregate(activity.imputed.weekend$steps, by=c(list(activity.imputed.weekend$interval),list(activity.imputed.weekend$TypeOfDay)), FUN=mean, na.rm=TRUE)
-str(StepsPerInterval)
+StepsPerInterval=
+  aggregate(activity.imputed.weekend$steps,
+            by=c(list(activity.imputed.weekend$interval),
+                 ist(activity.imputed.weekend$TypeOfDay)),
+            FUN=mean, na.rm=TRUE)
 ```
 
 ```
-## 'data.frame':	576 obs. of  3 variables:
-##  $ Group.1: int  0 5 10 15 20 25 30 35 40 45 ...
-##  $ Group.2: Factor w/ 2 levels "Weekday","Weekend": 1 1 1 1 1 1 1 1 1 1 ...
-##  $ x      : num  2.0222 0.4 0.1556 0.1778 0.0889 ...
+## Error: could not find function "ist"
 ```
 
 ```r
 colnames(StepsPerInterval)<-c('Interval','TypeOfDay','Steps')
+```
+
+```
+## Error: 'names' attribute [3] must be the same length as the vector [2]
 ```
 
 And the plot itself, split by Weekday/Weekend:
@@ -153,6 +152,8 @@ p<-ggplot(StepsPerInterval, aes(x=Interval, y=Steps)) +
 p
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
+```
+## Error: At least one layer must contain all variables used for facetting
+```
 
 We can see a more balanced activity over the course of the day during weekend, with a less pronounced peak in the morning and higher walking activity in the afternoon.
