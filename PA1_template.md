@@ -124,20 +124,9 @@ Aggregation for plotting:
 StepsPerInterval=
   aggregate(activity.imputed.weekend$steps,
             by=c(list(activity.imputed.weekend$interval),
-                 ist(activity.imputed.weekend$TypeOfDay)),
+                 list(activity.imputed.weekend$TypeOfDay)),
             FUN=mean, na.rm=TRUE)
-```
-
-```
-## Error: could not find function "ist"
-```
-
-```r
 colnames(StepsPerInterval)<-c('Interval','TypeOfDay','Steps')
-```
-
-```
-## Error: 'names' attribute [3] must be the same length as the vector [2]
 ```
 
 And the plot itself, split by Weekday/Weekend:
@@ -152,8 +141,6 @@ p<-ggplot(StepsPerInterval, aes(x=Interval, y=Steps)) +
 p
 ```
 
-```
-## Error: At least one layer must contain all variables used for facetting
-```
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
 We can see a more balanced activity over the course of the day during weekend, with a less pronounced peak in the morning and higher walking activity in the afternoon.

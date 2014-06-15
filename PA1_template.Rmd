@@ -91,7 +91,7 @@ Aggregation for plotting:
 StepsPerInterval=
   aggregate(activity.imputed.weekend$steps,
             by=c(list(activity.imputed.weekend$interval),
-                 ist(activity.imputed.weekend$TypeOfDay)),
+                 list(activity.imputed.weekend$TypeOfDay)),
             FUN=mean, na.rm=TRUE)
 colnames(StepsPerInterval)<-c('Interval','TypeOfDay','Steps')
 ```
